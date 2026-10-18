@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LatihanKu – Petualangan Belajar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Bricolage+Grotesque:wght@700;800&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{--bg:#EEF2F6;--card:#fff;--ink:#16202E;--mut:#5A6678;--line:#D6DEE8;--nav:#0B3B63;--gold:#F2A900;--btn:#0B3B63;--btnt:#fff;--ok:#0E6B43;--okbg:#DCF2E6;--bad:#B3261E;--badbg:#FBE4E2;--soft:#F5F8FB;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1420;--card:#16202F;--ink:#E8EEF8;--mut:#98A5BA;--line:#2A3850;--btn:#F2A900;--btnt:#10233A;--ok:#6FDDA6;--okbg:#12382A;--bad:#FF9A93;--badbg:#431B19;--soft:#1B2740;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1420;--card:#16202F;--ink:#E8EEF8;--mut:#98A5BA;--line:#2A3850;--btn:#F2A900;--btnt:#10233A;--ok:#6FDDA6;--okbg:#12382A;--bad:#FF9A93;--badbg:#431B19;--soft:#1B2740;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+.top{background:var(--nav);color:#fff;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;padding:10px 18px;border-bottom:3px solid var(--gold)}
+.brand{font-weight:800;font-size:20px;color:var(--gold)}.brand small{color:#fff;font-weight:400;font-size:13px;margin-left:6px}
+#nav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+#nav button{font:inherit;font-weight:600;color:#fff;background:transparent;border:0;border-radius:8px;padding:6px 12px;cursor:pointer}
+#nav button.on{background:rgba(255,255,255,.18)}
+.xp{font-size:14px;font-weight:600}
+main{max-width:1000px;margin:0 auto;padding:22px 16px 64px}
+h1{font-size:clamp(24px,5vw,34px);line-height:1.2;margin:0 0 6px;font-weight:800}
+h2{font-size:18px;margin:0 0 4px;font-weight:800}h3{margin:0 0 8px;font-size:15px}
+.sub{color:var(--mut);font-size:14px;margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.grid label{font-size:14px;font-weight:600;display:block}
+textarea,select,input[type=number],input[type=text],input[type=date]{width:100%;font:inherit;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:9px;margin-top:4px}
+textarea{min-height:120px;resize:vertical}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn{font:inherit;font-weight:700;background:var(--btn);color:var(--btnt);border:0;border-radius:8px;padding:10px 18px;cursor:pointer}
+.btn.ghost{background:var(--soft);color:var(--ink);border:1px solid var(--line)}.btn:disabled{opacity:.55;cursor:wait}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.msg{margin-top:10px;font-size:14px;color:var(--mut)}.msg.err{color:var(--bad)}
+.drop{display:block;border:2px dashed var(--line);border-radius:10px;padding:16px;text-align:center;cursor:pointer;color:var(--mut);margin-bottom:10px}
+.drop input{position:absolute;opacity:0;width:1px;height:1px}.drop:focus-within{border-color:var(--gold)}
+.path{border-left:3px dashed var(--line);margin:18px 0 0 22px;padding-left:28px}
+.node{position:relative;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px;display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.node.done{border-color:var(--ok)}
+.dot{position:absolute;left:-52px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:var(--card);border:3px solid var(--gold);display:grid;place-items:center;font-size:20px}
+.node.done .dot{border-color:var(--ok)}
+.pill{display:inline-block;background:var(--gold);color:#10233A;font-weight:700;border-radius:999px;padding:2px 12px;font-size:14px}
+.chip{display:inline-block;background:var(--gold);color:#10233A;border-radius:999px;padding:2px 12px;font-size:14px;font-weight:600;margin:0 6px 6px 0}
+.step{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.step input{margin-top:6px;accent-color:var(--btn);width:18px;height:18px}
+.qwrap{display:grid;grid-template-columns:230px 1fr;gap:16px;align-items:start}
+@media(max-width:720px){.qwrap{grid-template-columns:1fr}}
+.qside{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;position:sticky;top:8px}
+.qnav{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px}
+.nb{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:6px;padding:5px 0;cursor:pointer}
+.nb.a{background:var(--btn);color:var(--btnt);border-color:var(--btn)}.nb.c{outline:3px solid var(--gold)}
+.nb.ok{background:var(--okbg);color:var(--ok);border-color:var(--ok)}.nb.bad{background:var(--badbg);color:var(--bad);border-color:var(--bad)}
+.timer{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;margin:6px 0}.timer.low{color:var(--bad)}
+.link{font:inherit;background:none;border:0;color:var(--btn);text-decoration:underline;cursor:pointer;padding:0}
+:root:not([data-theme="light"]) .link{color:var(--gold)}
+.qmain{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.qmain.ok{border-color:var(--ok)}.qmain.bad{border-color:var(--bad)}
+.qno{font-weight:800;margin-bottom:8px}.qt{white-space:pre-wrap;margin:0 0 14px;max-width:75ch}
+.qimg{display:block;max-width:100%;width:420px;border:1px solid var(--line);border-radius:8px;background:#fff;margin:0 0 14px}
+.opt{display:flex;gap:12px;align-items:center;padding:9px 12px;border-radius:8px;cursor:pointer}
+.opt:hover{background:var(--soft)}.opt input{width:20px;height:20px;accent-color:var(--btn)}
+.opt .lt{color:var(--mut);font-size:14px;min-width:16px}
+.opt.ok{background:var(--okbg)}.opt.bad{background:var(--badbg)}
+.why{margin-top:12px;padding:10px 12px;border-radius:8px;background:var(--soft);font-size:14px}
+.foot{display:flex;justify-content:space-between;gap:8px;margin-top:20px}
+.sched{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;background:var(--card)}
+.big{font-size:26px;font-weight:800}.score{font-size:30px;font-weight:800}
+h1,h2,.brand,.score,.big{font-family:"Bricolage Grotesque","Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:-.01em}
+sup,sub{font-size:.72em;line-height:0}
+.card,.qmain,.qside,.node,.sched{border-radius:16px;box-shadow:0 1px 2px rgba(10,30,60,.06),0 8px 24px rgba(10,30,60,.05)}
+.btn{border-radius:10px;padding:11px 20px;transition:transform .12s}.btn:not(:disabled):hover{transform:translateY(-1px)}
+.top{background:linear-gradient(90deg,#0B3B63,#14597F)}
+.hero{position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(160deg,#0B3B63,#14597F 55%,#1F7A8C);color:#fff;padding:28px 26px 96px;margin-bottom:18px}
+.hero h1{color:#fff;font-size:clamp(26px,5vw,38px)}.hero p{margin:0 0 16px;opacity:.92;max-width:48ch}
+.hero svg{position:absolute;left:0;bottom:-1px;width:100%;height:84px}
+.bar{height:10px;border-radius:99px;background:rgba(255,255,255,.22);max-width:380px}.bar i{display:block;height:100%;border-radius:99px;background:var(--gold)}
+.sub2{font-size:13px;margin-top:6px;opacity:.92}
+.flash{display:block;width:100%;min-height:210px;border:2px solid var(--line);border-radius:20px;background:var(--card);color:var(--ink);padding:30px 26px;font:inherit;font-size:21px;font-weight:600;text-align:center;cursor:pointer;margin:12px 0}
+.flash:hover{border-color:var(--gold)}.flash .hint{font-size:13px;font-weight:400;color:var(--mut);margin-top:16px}.flash .mn{font-size:15px;font-weight:400;color:var(--mut);margin-top:16px}
+.fig{margin:0 0 14px}.fig figcaption{font-size:13px;color:var(--mut);margin-top:4px}.qimg{width:min(100%,520px);margin:0}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:12px 0}.thumb{margin:0}.thumb img{width:100%;height:130px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#fff}.thumb input{font-size:13px;padding:6px 8px;margin:6px 0 2px}.thumb figcaption{font-size:12px;color:var(--mut)}
+</style></head>
+<body>
+<header class="top"><div class="brand">⛺ LatihanKu<small>Petualangan Belajar</small></div><nav id="nav"></nav><div class="xp" id="xp"></div></header>
+<main id="main"></main>
+<script>
+/* Pengganti fitur claude.ai: semua panggilan AI lewat server sendiri di /api/ai */
+window.claude={use:async n=>{if(n!=='sample')return null;
+  const b64=b=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(String(f.result).split(',')[1]);f.readAsDataURL(b)});
+  const call=async(input,o={},retry=true)=>{const imgs=[];for(const b of [].concat(o.images||[]))imgs.push({type:b.type||'image/jpeg',data:await b64(b)});
+    let code='';try{code=localStorage.getItem('lk_code')||''}catch(e){}
+    const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json','x-access-code':code},body:JSON.stringify({prompt:input,images:imgs})});
+    if(r.status===401&&retry){const c=prompt('Masukkan kode akses LatihanKu:');if(c){try{localStorage.setItem('lk_code',c)}catch(e){}return call(input,o,false)}}
+    if(!r.ok){const e=await r.json().catch(()=>({}));throw{code:r.status===429?'rate_limited':r.status===401?'not_granted':'error',message:e.error}}
+    return (await r.json()).text};
+  const s=async(i,o)=>({text:await call(i,o)});
+  s.json=async(i,o)=>{const t=await call(i,o),m=t.match(/[\[{][\s\S]*[\]}]/);try{return JSON.parse(m?m[0]:t)}catch(e){throw{code:'invalid_json',text:t}}};
+  s.limits=async()=>({images:{maxCount:6}});
+  return s}};
+</script>
+<script>
+const $=s=>document.querySelector(s);
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+const RX=/\*(?!\s)([^*\n]{1,80}?)(?<!\s)\*|\^(\{[^}]{1,20}\}|[-+−]?(?:[0-9]{1,3}|[A-Za-z](?![A-Za-z])))|(?<=[A-Za-z0-9)\]])_(\{[^}]{1,20}\}|[0-9]{1,3}|[A-Za-z](?![A-Za-z]))/g;
+function rt(s){const f=document.createDocumentFragment();s=String(s==null?'':s);let i=0,m;RX.lastIndex=0;
+  while((m=RX.exec(s))){if(m.index>i)f.append(s.slice(i,m.index));
+    if(m[1]!=null)f.append(el('i',null,m[1]));else f.append(el(m[2]!=null?'sup':'sub',null,(m[2]||m[3]).replace(/^\{|\}$/g,'')));i=RX.lastIndex}
+  if(i<s.length)f.append(s.slice(i));return f}
+function rel(t,c,x){const e=el(t,c);e.append(rt(x));return e}
+const NOT=' Tulis pangkat dengan ^ (mis. 10^{-3}, m^2), indeks dengan _ (mis. H_2O, CO_2), dan nama ilmiah atau istilah asing dengan *miring* (mis. *Trichophyton mentagrophytes*). Jangan memakai karakter superskrip atau subskrip Unicode.';
+const du=b=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(b)});
+async function shrink(blob){try{const b=await createImageBitmap(blob);if(b.width<160||b.height<160)return null;const k=Math.min(1,900/Math.max(b.width,b.height)),c=document.createElement('canvas');c.width=Math.round(b.width*k);c.height=Math.round(b.height*k);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(b,0,0,c.width,c.height);return await new Promise(r=>c.toBlob(r,'image/jpeg',.82))}catch(e){return null}}
+const ptxt=x=>[...x.matchAll(/<a:p[ >][\s\S]*?<\/a:p>/g)].map(p=>[...p[0].matchAll(/<a:r>([\s\S]*?)<\/a:r>/g)].map(r=>{const b=+((r[1].match(/baseline="(-?\d+)"/)||[])[1]||0),t=dec((r[1].match(/<a:t[^>]*>([^<]*)<\/a:t>/)||[,''])[1]);return b>0?'^{'+t+'}':b<0?'_{'+t+'}':t}).join('')).filter(Boolean).join(' ');
+const LS={get(k,d){try{const v=localStorage.getItem('lk_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('lk_'+k,JSON.stringify(v))}catch(e){}}};
+const norm=s=>String(s).toLowerCase().replace(/\s+/g,' ').trim();
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let S={view:'peta',text:'',guide:null,imgs:[],cards:null,known:{},pos:0},Q=null,tm=null;
+const RANKS=[[0,'Pemula'],[50,'Penjelajah'],[150,'Pendekar'],[300,'Legenda']];
+function addXP(n){LS.set('xp',LS.get('xp',0)+n);rxp()}
+function rxp(){const x=LS.get('xp',0);let r=RANKS[0][1];RANKS.forEach(([m,n])=>{if(x>=m)r=n});$('#xp').textContent='⭐ '+x+' XP · '+r}
+const VIEWS={peta:'🗺️ Peta',materi:'📜 Materi',latihan:'⚔️ Latihan',hafalan:'🧠 Hafalan',jadwal:'📅 Jadwal ujian'};
+function go(v){S.view=v;draw()}
+function draw(){const m=$('#main');m.replaceChildren();({peta,materi,hafalan,latihan,jadwal})[S.view](m);
+  const n=$('#nav');n.replaceChildren();Object.entries(VIEWS).forEach(([k,t])=>{const b=el('button',k===S.view?'on':'',t);b.onclick=()=>go(k);n.append(b)});rxp();scrollTo(0,0)}
+async function ai(p){const s=await claude.use('sample');if(!s)throw{code:'none'};return s.json(p)}
+const errTxt=e=>e&&e.code==='noimg'?'Server belum bisa menerima gambar.':e&&e.code==='not_granted'?'Kode akses salah atau belum diisi.':e&&e.code==='rate_limited'?'Batas pemakaian hari ini tercapai. Coba lagi besok.':'Gagal menghubungi AI. Coba lagi sebentar lagi.';
+const dec=s=>{const t=document.createElement('textarea');t.innerHTML=s;return t.value};
+const days=d=>Math.round((new Date(d+'T00:00:00')-new Date(new Date().toDateString()))/864e5);
+
+/* ===== PETA ===== */
+function peta(m){
+  const sc=LS.get('sched',[]).filter(x=>days(x.d)>=0).sort((a,b)=>a.d.localeCompare(b.d)),done=LS.get('done',{});
+  const xv=LS.get('xp',0),nx=RANKS.find(r=>r[0]>xv),pv=[...RANKS].reverse().find(r=>r[0]<=xv),pc=nx?Math.round((xv-pv[0])/(nx[0]-pv[0])*100):100;
+  const h=el('div','hero');h.append(el('h1',null,'Selamat datang, penjelajah!'),el('p',null,'Selesaikan lima misi untuk siap menghadapi ujian. Setiap misi memberi XP.'));
+  const pb=el('div','bar'),pi=el('i');pi.style.width=pc+'%';pb.append(pi);h.append(pb,el('div','sub2',xv+' XP'+(nx?' · '+(nx[0]-xv)+' XP lagi menuju '+nx[1]:' · pangkat tertinggi')));
+  h.insertAdjacentHTML('beforeend','<svg viewBox="0 0 800 80" preserveAspectRatio="none" aria-hidden="true"><path style="fill:var(--bg)" d="M0 80V50L90 18l70 34 80-40 90 52 100-36 110 44 90-34 170 42v14z"/></svg>');m.append(h);
+  if(sc[0]){const d=days(sc[0].d);m.append(Object.assign(el('div','card'),{}));m.lastChild.append(el('span','pill',d===0?'Hari ini':'H-'+d),el('b',null,' '+sc[0].j+' '+sc[0].m+' sudah dekat.'))}
+  const Qs=[['🎒','Siapkan bekal','Masukkan materi atau PPT-mu.',S.text.length>40,'materi'],['📜','Baca peta belajar','Buat panduan dan langkah belajar dari materi.',!!S.guide,'materi'],['🧠','Asah ingatan','Hafalkan kartu dan jembatan keledai.',!!S.cards,'hafalan'],['⚔️','Hadapi rintangan','Kerjakan latihan soal bertimer.',!!done.latihan,'latihan'],['🏰','Rencanakan ekspedisi','Catat jadwal responsi, UTS, dan UAS.',LS.get('sched',[]).length>0,'jadwal']];
+  const p=el('div','path');Qs.forEach(([i,t,d,ok,v])=>{const n=el('div','node'+(ok?' done':''));n.append(el('div','dot',ok?'✅':i));const b=el('div');b.append(el('b',null,t),el('div','sub',d));const g=el('button','btn'+(ok?' ghost':''),ok?'Ulangi':'Mulai');g.onclick=()=>go(v);n.append(b,g);p.append(n)});m.append(p);
+}
+
+/* ===== MATERI ===== */
+function materi(m){
+  const c=el('section','card');c.append(el('h2',null,'📜 Bahan materi'),el('p','sub','Unggah .pptx, .txt, .md, atau tempel teks. File .ppt lama: simpan dulu sebagai .pptx.'));
+  const dr=el('label','drop');const fi=el('input');fi.type='file';fi.accept='.pptx,.txt,.md';const fn=el('span',null,'Klik untuk memilih file');dr.append(fi,fn);
+  const ta=el('textarea');ta.placeholder='Atau tempel materi di sini…';ta.value=S.text;ta.oninput=()=>S.text=ta.value;
+  const fm=el('div','msg');c.append(dr,ta,fm);
+  fi.onchange=async e=>{const f=e.target.files[0];if(!f)return;fm.className='msg';fm.textContent='Membaca file…';
+    try{let t='';
+      if(/\.pptx$/i.test(f.name)){if(!window.JSZip)throw Error('Pembaca PPT belum termuat. Muat ulang halaman.');
+        const z=await JSZip.loadAsync(await f.arrayBuffer());const num=n=>+n.match(/(\d+)\.xml$/)[1];
+        const ns=Object.keys(z.files).filter(n=>/^ppt\/slides\/slide\d+\.xml$/.test(n)).sort((a,b)=>num(a)-num(b));
+        const sl={};for(const n of ns){const x=await z.files[n].async('string'),tx=ptxt(x);sl[num(n)]=tx;t+='Slide '+num(n)+': '+tx+'\n'}
+        S.imgs=S.imgs.filter(e=>!e.ppt);const seen=new Set();
+        for(const n of ns){const rf=z.file('ppt/slides/_rels/slide'+num(n)+'.xml.rels');if(!rf)continue;const rx=await rf.async('string');
+          for(const r of rx.matchAll(/Target="\.\.\/media\/([^"]+\.(?:png|jpe?g|gif|webp))"/gi)){if(seen.has(r[1])||S.imgs.length>=12)continue;seen.add(r[1]);const zf=z.file('ppt/media/'+r[1]);if(!zf)continue;const b=await shrink(await zf.async('blob'));if(b)S.imgs.push({src:await du(b),blob:b,ppt:1,from:f.name+', slide '+num(n),ctx:sl[num(n)]||'',cap:''})}}}
+      else if(/\.(txt|md)$/i.test(f.name))t=await f.text();else throw Error('Format belum didukung.');
+      if(!t.trim())throw Error('Tidak ada teks terbaca. Slide berisi gambar saja tidak bisa dibaca.');
+      S.text=t.trim();ta.value=S.text;fn.textContent=f.name;fm.textContent='Berhasil membaca '+t.length+' karakter dan '+S.imgs.filter(e=>e.ppt).length+' gambar.';ic.show();
+    }catch(x){fm.className='msg err';fm.textContent=x.message}};
+  const gb=el('button','btn','Buat panduan belajar');gb.style.marginTop='12px';c.append(gb);m.append(c);
+  const ic=imgCard();m.append(ic);const out=el('div');m.append(out);if(S.guide)guide(out);
+  gb.onclick=async()=>{if(S.text.trim().length<40){fm.className='msg err';fm.textContent='Materi terlalu pendek.';return}
+    gb.disabled=true;gb.textContent='Menyusun peta belajar…';fm.className='msg';fm.textContent='Biasanya 15–40 detik.';
+    try{S.guide=await ai(`Kamu tutor. Berdasarkan materi berikut, susun panduan belajar Bahasa Indonesia. Kembalikan HANYA JSON: {"ringkasan":["5-7 poin inti"],"konsep":[{"judul":"","isi":"penjelasan 2-3 kalimat"}],"langkah":[{"judul":"nama langkah","aksi":"apa yang dilakukan, spesifik pada materi ini"}],"istilah":[{"k":"istilah","v":"arti singkat"}]}. "langkah" berisi 5-7 langkah belajar berurutan (mis. skimming, mencatat, menjelaskan ulang, latihan mengingat, uji diri). Jangan menambah fakta di luar materi.${NOT}\n\nMATERI:\n${S.text.slice(0,14000)}`);
+      fm.textContent='';guide(out);addXP(10)}catch(e){fm.className='msg err';fm.textContent=errTxt(e)}
+    gb.disabled=false;gb.textContent='Buat panduan belajar'};
+}
+function imgCard(){const c=el('section','card');c.append(el('h2',null,'🔬 Gambar spesifik'),el('p','sub','Gambar di PPT terbaca otomatis. Tambahkan gambar literatur (preparat, diagram, foto klinis) beserta sumbernya. Isi keterangan gambar agar soal yang dibuat akurat.'));
+  const g=el('div','thumbs');c.append(g);
+  const show=()=>{g.replaceChildren();if(!S.imgs.length)g.append(el('p','sub','Belum ada gambar.'));
+    S.imgs.forEach((e,i)=>{const t=el('figure','thumb'),im=el('img'),cp=el('input'),sc=el('figcaption',null,'Sumber: '+e.from),d=el('button','link','Hapus');im.src=e.src;im.alt='Gambar '+(i+1);cp.type='text';cp.placeholder='Keterangan, mis. Preparat KOH 10%';cp.value=e.cap||'';cp.oninput=()=>e.cap=cp.value;d.onclick=()=>{S.imgs.splice(i,1);show()};t.append(im,cp,sc,d);g.append(t)})};
+  const gr=el('div','grid'),fl=el('label',null,'Tambah gambar literatur'),fi=el('input'),sl=el('label',null,'Sumber gambar'),si=el('input'),mg=el('div','msg');
+  fi.type='file';fi.accept='image/*';fi.multiple=true;fl.append(fi);si.type='text';si.placeholder='Penulis, judul buku atau jurnal, tahun, halaman atau URL';sl.append(si);gr.append(fl,sl);c.append(gr,mg);
+  fi.onchange=async()=>{if(!si.value.trim()){mg.className='msg err';mg.textContent='Isi sumber gambar dulu, lalu pilih file.';fi.value='';return}
+    for(const x of fi.files){const b=await shrink(x);if(b)S.imgs.push({src:await du(b),blob:b,from:si.value.trim(),ctx:'',cap:''})}fi.value='';mg.textContent='';show()};
+  show();c.show=show;return c}
+function guide(o){o.replaceChildren();const g=S.guide||{},ck=LS.get('steps',{});
+  const sec=(t,f)=>{const c=el('section','card');c.append(el('h2',null,t));f(c);o.append(c)};
+  sec('🧭 Ringkasan',c=>{const u=el('ul');(g.ringkasan||[]).forEach(x=>u.append(rel('li',null,x)));c.append(u)});
+  sec('💎 Konsep kunci',c=>(g.konsep||[]).forEach(k=>{const d=el('div','step');const b=el('div');b.append(rel('b',null,k.judul),rel('div',null,k.isi));d.append(b);c.append(d)}));
+  sec('🪜 Langkah belajar',c=>{c.append(el('p','sub','Centang setiap langkah yang selesai. Tiap langkah memberi 5 XP.'));(g.langkah||[]).forEach((l,i)=>{const d=el('label','step'),cb=el('input');cb.type='checkbox';cb.checked=!!ck[l.judul];
+    cb.onchange=()=>{if(cb.checked&&!ck[l.judul])addXP(5);ck[l.judul]=cb.checked;LS.set('steps',ck)};const b=el('div');b.append(rel('b',null,(i+1)+'. '+l.judul),rel('div',null,l.aksi));d.append(cb,b);c.append(d)})});
+  sec('📖 Istilah penting',c=>(g.istilah||[]).forEach(t=>{const s=el('div');s.append(rel('span','chip',t.k),rt(t.v));c.append(s)}));
+  const b=el('button','btn','Lanjut ke latihan');b.onclick=()=>go('latihan');o.append(b)}
+
+/* ===== HAFALAN ===== */
+function hafalan(m){
+  m.append(el('h1',null,'🧠 Ruang hafalan'),el('p','sub','Kartu hafalan dan jembatan keledai dari materimu. Balik kartu, lalu nilai dirimu.'));
+  const c=el('section','card'),b=el('button','btn',S.cards?'Buat ulang kartu':'Buat materi hafalan'),ms=el('div','msg');c.append(b,ms);m.append(c);
+  const o=el('div');m.append(o);if(S.cards)deck(o);
+  b.onclick=async()=>{if(S.text.trim().length<40){ms.className='msg err';ms.textContent='Isi materi dulu di menu Materi.';return}
+    b.disabled=true;b.textContent='Menyusun kartu…';ms.className='msg';ms.textContent='Biasanya 15–40 detik.';
+    try{S.cards=await ai(`Kamu pelatih hafalan. Dari materi berikut, buat materi hafalan Bahasa Indonesia. Kembalikan HANYA JSON: {"kartu":[{"d":"sisi depan: istilah atau pertanyaan singkat","b":"sisi belakang: jawaban ringkas","m":"jembatan keledai, akronim, atau asosiasi unik untuk mengingatnya"}],"daftar":[{"judul":"daftar berurutan yang perlu dihafal","isi":["butir 1","butir 2"],"m":"singkatan atau kalimat pengingat"}]}. Buat 15-25 kartu dan 2-4 daftar. Jangan menambah fakta di luar materi.${NOT}\n\nMATERI:\n${S.text.slice(0,14000)}`);
+      S.known={};S.pos=0;ms.textContent='';deck(o);addXP(5)}catch(e){ms.className='msg err';ms.textContent=errTxt(e)}
+    b.disabled=false;b.textContent='Buat ulang kartu'}}
+function deck(o){o.replaceChildren();const K=S.cards.kartu||[],kn=S.known,q=K.map((_,i)=>i).filter(i=>!kn[i]);
+  o.append(el('p','sub','Hafal '+(K.length-q.length)+' dari '+K.length+' kartu'));
+  if(K.length&&!q.length){const c=el('div','card'),rb=el('button','btn ghost','Ulangi dari awal');c.append(el('h2',null,'🎉 Semua kartu sudah hafal!'),rb);rb.onclick=()=>{S.known={};deck(o)};o.append(c)}
+  else if(K.length){const i=q[(S.pos||0)%q.length],k=K[i],fc=el('button','flash');let fl=false;
+    const pt=()=>{fc.replaceChildren();fc.append(rel('div',null,fl?k.b:k.d));if(fl&&k.m){const mn=el('div','mn','💡 ');mn.append(rt(k.m));fc.append(mn)}if(!fl)fc.append(el('div','hint','Ketuk untuk membalik'))};
+    fc.onclick=()=>{fl=!fl;pt()};pt();
+    const r=el('div','row'),n=el('button','btn ghost','Belum hafal'),y=el('button','btn','Hafal ✓');
+    n.onclick=()=>{S.pos=(S.pos||0)+1;deck(o)};y.onclick=()=>{kn[i]=1;addXP(2);deck(o)};r.append(n,y);o.append(fc,r)}
+  const ds=S.cards.daftar||[];if(ds.length)o.append(el('h2',null,'Daftar hafalan'));
+  ds.forEach(d=>{const c=el('section','card'),ol=el('ol');c.append(rel('h2',null,d.judul));(d.isi||[]).forEach(x=>ol.append(rel('li',null,x)));c.append(ol);if(d.m){const p=el('p','sub','💡 ');p.append(rt(d.m));c.append(p)}o.append(c)})}
+
+/* ===== LATIHAN ===== */
+const TYPES=[['pg','Pilihan ganda (a–e)',4],['multi','Jawaban lebih dari satu',2],['tf','Benar atau salah',3],['isian','Isian singkat dari bank jawaban',3],['img','Soal bergambar (dari PPT / literatur)',2]];
+function latihan(m){if(Q)return runner(m);
+  m.append(el('h1',null,'⚔️ Arena latihan'),el('p','sub','Soal dibuat dari materi di menu Materi.'));
+  const c=el('section','card'),g=el('div','grid');
+  TYPES.forEach(([k,n,d])=>{const l=el('label',null,n),i=el('input');i.type='number';i.min=0;i.max=8;i.value=d;i.id='n_'+k;l.append(i);g.append(l)});
+  const sel=(id,t,o,d)=>{const l=el('label',null,t),s=el('select');s.id=id;o.forEach(([v,x])=>s.append(new Option(x,v)));s.value=d;l.append(s);g.append(l)};
+  sel('level','Tingkat kesulitan',[['Mudah','Mudah'],['Sedang','Sedang'],['Sulit','Sulit']],'Sedang');
+  sel('story','Soal cerita (literasi)',[['all','Semua soal bercerita'],['some','Sebagian bercerita'],['none','Tanpa cerita']],'all');
+  const tl=el('label',null,'Timer (menit, 0 = tanpa timer)'),ti=el('input');ti.type='number';ti.min=0;ti.max=240;ti.value=LS.get('timer',20);ti.id='timer_in';tl.append(ti);g.append(tl);
+  const b=el('button','btn','Mulai petualangan'),ms=el('div','msg');ms.setAttribute('role','status');const r=el('div','row');r.append(b);c.append(g,r,ms);m.append(c);
+  b.onclick=async()=>{const text=S.text.trim();ms.className='msg';
+    if(text.length<40){ms.className='msg err';ms.textContent='Isi materi dulu di menu Materi.';return}
+    const n={};TYPES.forEach(([k])=>n[k]=Math.max(0,Math.min(8,+$('#n_'+k).value||0)));
+    if(!Object.values(n).some(v=>v)){ms.className='msg err';ms.textContent='Isi minimal satu jenis soal.';return}
+    const tmin=Math.max(0,+ti.value||0);LS.set('timer',tmin);
+    b.disabled=true;b.textContent='Menyiapkan soal…';ms.textContent='AI menyusun soal bacaan panjang dan gambar. Bisa 30–90 detik.';
+    const SR={all:'SEMUA soal berbentuk soal cerita bergaya literasi: teks stimulus 100-160 kata (paragraf kasus/narasi dengan tokoh, data, situasi realistis yang relevan dengan materi), lalu pertanyaan.',some:'Sekitar separuh soal berbentuk cerita literasi 100-160 kata lalu pertanyaan, sisanya soal langsung. Jika hanya 1 soal, buat bercerita.',none:'Semua soal langsung tanpa cerita.'}[$('#story').value];
+    const sch={pg:'{"q":"stimulus + pertanyaan","options":["","","","",""],"answer":0,"why":"pembahasan"} (5 opsi; letak jawaban benar divariasikan; answer = indeks 0-4)',
+      multi:'{"q":"","options":["","","","",""],"answers":[0,2],"why":""} (2-3 jawaban benar; soal menyuruh memilih semua yang benar)',
+      tf:'{"q":"stimulus lalu satu pernyataan yang dinilai","answer":true,"why":""} (campur benar dan salah)',
+      isian:'{"q":"stimulus yang memuat ____ pada bagian kosong","answer":"kata atau frasa pendek","why":""} (jawaban unik antar soal)',
+      img:'{"q":"stimulus + pertanyaan yang hanya bisa dijawab dengan melihat gambar","svg":"<svg viewBox=\'0 0 400 260\' xmlns=\'http://www.w3.org/2000/svg\'>...</svg>","options":["","","","",""],"answer":0,"why":""}. SVG: ilustrasi atau diagram sederhana yang menggambarkan materi (bentuk dasar, warna jelas, label teks pendek ukuran minimal 12, latar putih), pakai tanda kutip tunggal pada atribut, tanpa script dan tanpa gambar eksternal'};
+    const keys=TYPES.map(t=>t[0]).filter(k=>n[k]>0);
+    const res=await Promise.allSettled(keys.map(k=>k==='img'&&S.imgs.length?imgJob(n.img,SR,text):ai(`Kamu pembuat soal ujian. Buat ${n[k]} soal Bahasa Indonesia, tingkat ${$('#level').value}, HANYA berdasarkan materi. ${SR} Jangan menambah fakta di luar materi.${NOT} Kembalikan HANYA JSON array berisi ${n[k]} objek berbentuk: ${sch[k]}\n\nMATERI:\n${text.slice(0,12000)}`)));
+    let items=[],fail=0,last;
+    res.forEach((r,i)=>{if(r.status!=='fulfilled'){fail++;last=r.reason;return}const a=Array.isArray(r.value)?r.value:(r.value.items||[]);
+      a.forEach(x=>{if(!x||!x.q)return;x.t=keys[i];
+        if(['pg','multi','img'].includes(x.t)){if(!Array.isArray(x.options)||x.options.length<2)return;if(x.t==='multi'&&!Array.isArray(x.answers))return;if(x.t!=='multi'&&!(x.answer>=0&&x.answer<x.options.length))return}
+        if(x.t==='tf'&&typeof x.answer!=='boolean')return;if(x.t==='isian'&&!x.answer)return;
+        if(x.svg){x.svg=String(x.svg);if(!x.svg.trim().startsWith('<svg'))x.svg=null;else if(!/xmlns/.test(x.svg))x.svg=x.svg.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"')}if(x.svg)x.source='Ilustrasi buatan AI (bukan foto asli)';
+        items.push(x)})});
+    b.disabled=false;b.textContent='Mulai petualangan';
+    if(!items.length){ms.className='msg err';ms.textContent=errTxt(last);return}
+    Q={items,ans:[],cur:0,sum:false,done:false,bank:shuffle([...new Set(items.filter(x=>x.t==='isian').map(x=>String(x.answer)))]),end:tmin?Date.now()+tmin*6e4:0};
+    clearInterval(tm);if(Q.end)tm=setInterval(tick,1000);draw();
+    if(fail)setTimeout(()=>{const x=$('#main');x.prepend(Object.assign(el('div','msg err'),{textContent:fail+' jenis soal gagal dibuat dan dilewati.'}))},0)};
+}
+async function imgJob(n,SR,text){const s=await claude.use('sample');if(!s)throw{code:'none'};
+  const lim=await s.limits().catch(()=>({}));if(!lim.images)throw{code:'noimg'};
+  const pk=shuffle(S.imgs).slice(0,Math.min(n,S.imgs.length,lim.images.maxCount||6));
+  const info=pk.map((e,i)=>`Gambar ${i+1} — sumber: ${e.from}; keterangan dari pengguna: ${e.cap||'(tidak ada)'}; teks slide asal: ${(e.ctx||'(tidak ada)').slice(0,350)}`).join('\n');
+  const a=await s.json(`Kamu pembuat soal ujian. Terlampir ${pk.length} gambar sesuai urutan Gambar 1 sampai ${pk.length}.\n${info}\n\nBuat ${pk.length} soal Bahasa Indonesia tingkat ${$('#level').value}, satu soal untuk tiap gambar, yang harus dijawab dengan mengamati gambar tersebut. ${SR} Anggap keterangan dan teks slide sebagai kebenaran identitas gambar; jangan menebak identitas atau fakta yang tidak didukung keterangan, teks slide, atau materi. Jika gambar kurang jelas, tanyakan ciri yang pasti terlihat.${NOT} Kembalikan HANYA JSON array: {"g":1,"q":"stimulus + pertanyaan","options":["","","","",""],"answer":0,"why":"pembahasan"} (answer = indeks 0-4; g = nomor gambar).\n\nMATERI:\n${text.slice(0,9000)}`,{images:pk.map(e=>e.blob)});
+  return (Array.isArray(a)?a:a.items||[]).map(x=>{const e=pk[(x.g||1)-1]||pk[0];x.src=e.src;x.source=e.from;return x})}
+const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function tick(){if(!Q||Q.done){clearInterval(tm);return}const s=Math.max(0,Math.round((Q.end-Date.now())/1000)),t=$('#timer');
+  if(t){t.textContent='⏱ '+fmt(s);t.classList.toggle('low',s<60)}if(s<=0)finish()}
+function grade(it,a){if(a==null||a==='')return false;
+  if(it.t==='multi'){const k=[...it.answers].sort().join(),g=[...(a||[])].sort().join();return k===g}
+  if(it.t==='isian')return norm(a)===norm(it.answer);return a===it.answer}
+function navbtns(rv){const n=$('#qnav');if(!n)return;n.replaceChildren();Q.items.forEach((it,i)=>{const a=Q.ans[i],has=a!=null&&a!==''&&!(Array.isArray(a)&&!a.length);
+  const b=el('button','nb'+(rv?(grade(it,a)?' ok':' bad'):has?' a':'')+(i===Q.cur&&!Q.sum?' c':''),i+1);b.onclick=()=>{Q.cur=i;Q.sum=false;draw()};n.append(b)})}
+function qbody(it,i,rv){const box=el('div'),a=Q.ans;box.append(rel('p','qt',it.q));
+  const src=it.src||(it.svg&&'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(it.svg));if(src){const fg=el('figure','fig'),im=el('img','qimg');im.alt='Gambar soal';im.src=src;fg.append(im);if(it.source)fg.append(el('figcaption',null,'Sumber: '+it.source));box.append(fg)}
+  const upd=()=>navbtns(false);
+  if(['pg','img','multi'].includes(it.t)){const mu=it.t==='multi',key=mu?it.answers:[it.answer];
+    it.options.forEach((o,j)=>{const l=el('label','opt'),r=el('input');r.type=mu?'checkbox':'radio';r.name='q'+i;r.checked=mu?(a[i]||[]).includes(j):a[i]===j;r.disabled=rv;
+      r.onchange=()=>{if(mu){const s=new Set(a[i]||[]);r.checked?s.add(j):s.delete(j);a[i]=[...s]}else a[i]=j;upd()};
+      if(rv){if(key.includes(j))l.classList.add('ok');else if(r.checked)l.classList.add('bad')}
+      l.append(r,el('span','lt',String.fromCharCode(97+j)+'.'),rel('span',null,o));box.append(l)})}
+  else if(it.t==='tf'){[['Benar',true],['Salah',false]].forEach(([t,v])=>{const l=el('label','opt'),r=el('input');r.type='radio';r.name='q'+i;r.checked=a[i]===v;r.disabled=rv;r.onchange=()=>{a[i]=v;upd()};
+    if(rv){if(v===it.answer)l.classList.add('ok');else if(r.checked)l.classList.add('bad')}l.append(r,el('span',null,t));box.append(l)})}
+  else{const bk=el('div');Q.bank.forEach(x=>bk.append(rel('span','chip',x)));const s=el('select');s.append(new Option('— pilih jawaban —',''));Q.bank.forEach(x=>s.append(new Option(x,x)));s.value=a[i]||'';s.disabled=rv;s.onchange=()=>{a[i]=s.value;upd()};box.append(el('div','sub','Bank jawaban:'),bk,s)}
+  if(rv){const k=it.t==='multi'?it.answers.map(j=>String.fromCharCode(97+j)).join(', '):it.t==='tf'?(it.answer?'Benar':'Salah'):it.t==='isian'?it.answer:String.fromCharCode(97+it.answer);
+    const w=el('div','why');w.append(el('b',null,'Jawaban benar: '),rt(k));if(it.why){w.append(document.createElement('br'),rt(it.why))}box.append(w)}
+  return box}
+function runner(m){if(Q.done)return review(m);
+  const w=el('div','qwrap'),sd=el('aside','qside'),mn=el('div','qmain');sd.append(el('h3',null,'Navigasi kuis'));
+  const nv=el('div','qnav');nv.id='qnav';sd.append(nv);
+  if(Q.end){const t=el('div','timer');t.id='timer';sd.append(t)}
+  const fb=el('button','link','Selesaikan kuis…');fb.onclick=()=>{Q.sum=true;draw()};sd.append(fb);w.append(sd,mn);m.append(w);
+  if(Q.sum){mn.append(el('h2',null,'Ringkasan percobaan'));const ans=Q.items.filter((_,i)=>{const a=Q.ans[i];return a!=null&&a!==''&&!(Array.isArray(a)&&!a.length)}).length;
+    mn.append(el('p',null,'Terjawab: '+ans+' dari '+Q.items.length+' soal.'+(ans<Q.items.length?' Masih ada soal yang belum dijawab.':'')));
+    const r=el('div','foot'),bk=el('button','btn ghost','Kembali ke kuis'),sb=el('button','btn','Kirim semua dan selesaikan');bk.onclick=()=>{Q.sum=false;draw()};sb.onclick=finish;r.append(bk,sb);mn.append(r)}
+  else{const i=Q.cur,it=Q.items[i];mn.append(el('div','qno','Soal '+(i+1)+' dari '+Q.items.length),qbody(it,i,false));
+    const f=el('div','foot'),p=el('button','btn ghost','Halaman sebelumnya'),n=el('button','btn',i===Q.items.length-1?'Selesaikan kuis':'Halaman berikutnya');
+    p.disabled=i===0;p.onclick=()=>{Q.cur--;draw()};n.onclick=()=>{if(i===Q.items.length-1)Q.sum=true;else Q.cur++;draw()};f.append(p,n);mn.append(f)}
+  navbtns(false);tick()}
+function finish(){if(!Q||Q.done)return;clearInterval(tm);Q.done=true;Q.ok=Q.items.filter((it,i)=>grade(it,Q.ans[i])).length;addXP(10+Q.ok*5);const d=LS.get('done',{});d.latihan=1;LS.set('done',d);if(S.view==='latihan')draw()}
+function review(m){const pc=Math.round(Q.ok/Q.items.length*100);
+  const c=el('section','card');c.append(el('h2',null,'🏆 Petualangan selesai'),el('div','score',Q.ok+' / '+Q.items.length+' ('+pc+'%)'),el('p','sub','+'+(10+Q.ok*5)+' XP didapat. Baca pembahasan di bawah.'));
+  const r=el('div','row'),b=el('button','btn','Petualangan baru');b.onclick=()=>{Q=null;draw()};r.append(b);c.append(r);m.append(c);
+  Q.items.forEach((it,i)=>{const ok=grade(it,Q.ans[i]),d=el('div','qmain'+(ok?' ok':' bad'));d.style.marginBottom='14px';d.append(el('div','qno','Soal '+(i+1)+(ok?' ✓ Benar':' ✗ Kurang tepat')),qbody(it,i,true));m.append(d)})}
+
+/* ===== JADWAL ===== */
+function jadwal(m){
+  m.append(el('h1',null,'📅 Papan informasi ujian'),el('p','sub','Catat jadwalmu. Data tersimpan di peramban ini saja.'));
+  const c=el('section','card'),g=el('div','grid');
+  const mk=(t,tag,id)=>{const l=el('label',null,t),i=tag==='select'?el('select'):el('input');if(tag==='select')['Responsi','UTS','UAS','Kuis','Praktikum','Lainnya'].forEach(x=>i.append(new Option(x,x)));else i.type=tag;i.id=id;l.append(i);g.append(l)};
+  mk('Jenis','select','s_j');mk('Mata kuliah / pelajaran','text','s_m');mk('Tanggal','date','s_d');
+  const b=el('button','btn','Tambah ke papan'),ms=el('div','msg');const r=el('div','row');r.append(b);c.append(g,r,ms);m.append(c);
+  const list=el('div');m.append(list);
+  const show=()=>{list.replaceChildren();const a=LS.get('sched',[]).sort((x,y)=>x.d.localeCompare(y.d));
+    if(!a.length){list.append(el('p','sub','Belum ada jadwal. Tambahkan responsi, UTS, atau UAS pertamamu.'));return}
+    a.forEach(x=>{const d=days(x.d),row=el('div','sched'),L=el('div');L.append(el('b',null,x.j+' – '+x.m),el('div','sub',new Date(x.d+'T00:00:00').toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})));
+      const R=el('div','row');R.style.margin='0';R.append(el('span',d>=0?'pill':'sub',d>0?'H-'+d:d===0?'Hari ini':'Sudah lewat'));
+      const del=el('button','btn ghost','Hapus');del.onclick=()=>{LS.set('sched',LS.get('sched',[]).filter(y=>y.id!==x.id));show()};R.append(del);row.append(L,R);list.append(row)})};
+  b.onclick=()=>{const mm=$('#s_m').value.trim(),dd=$('#s_d').value;if(!mm||!dd){ms.className='msg err';ms.textContent='Isi mata kuliah dan tanggal.';return}
+    const a=LS.get('sched',[]);a.push({id:Date.now(),j:$('#s_j').value,m:mm,d:dd});LS.set('sched',a);ms.className='msg';ms.textContent='';$('#s_m').value='';addXP(5);show()};
+  show();
+}
+draw();
+</script></body></html>
