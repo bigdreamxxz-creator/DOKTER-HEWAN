@@ -28,3 +28,5 @@ Isi proyek:
 - Soal panjang dengan gambar bisa makan waktu 30-90 detik dan paling banyak memakai biaya.
 - Kode ini belum diuji di akun Cloudflare-mu; kalau ada error, cek Deployments > Functions logs.
 - deploy ulang
+
+- 
